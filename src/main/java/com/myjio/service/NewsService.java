@@ -1,12 +1,12 @@
 package com.myjio.service;
 
 import com.myjio.model.NewsResponse;
+import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import java.net.URI;
 
 @ApplicationScoped
 public class NewsService {
@@ -15,25 +15,14 @@ public class NewsService {
     protected String apiKey;
 
 
-    private NewsResponse fetchNews(String URL, String paramKey, String paramValue) {
-        try (Client client = ClientBuilder.newClient()) {
-            WebTarget target = client.target(URL)
-                    .queryParam("apiKey", apiKey)
-                    .queryParam(paramKey, paramValue);
+    @RestClient
+    private  NewsApiClient newsApiClient;
 
-            Response response = target.request().get();
-            NewsResponse newsResponse = response.readEntity(NewsResponse.class);
-            newsResponse.setCountry(paramValue != null ? paramValue : "Unknown");
-
-            return newsResponse;
-        }
+    public NewsResponse getHeadlines(String country) {
+        return newsApiClient.getTopHeadlines(country,apiKey);
     }
 
-    public NewsResponse getHeadlines(String country, String URL) {
-        return fetchNews(URL, "country", country);
-    }
-
-    public NewsResponse getAllNews(String query, String URL) {
-        return fetchNews(URL, "q", query);
+    public NewsResponse getAllNews(String query) {
+        return newsApiClient.getEverything(query,apiKey);
     }
 }
