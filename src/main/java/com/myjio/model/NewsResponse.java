@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewsResponse {
-    String country;
     Integer totalResults;
     Article[] articles;
 }
