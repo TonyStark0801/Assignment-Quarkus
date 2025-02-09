@@ -1,12 +1,9 @@
 package com.myjio.service;
 
 import com.myjio.model.NewsResponse;
-import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import java.net.URI;
 
 @ApplicationScoped
 public class NewsService {
